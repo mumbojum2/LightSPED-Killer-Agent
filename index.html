@@ -167,6 +167,7 @@
 	}
 
 	function createPopup() {
+	    let timeOfPopupCreation = Date.now(); // this variable is for detecting if lightspeed was actually hanged or not
             const overlay = document.createElement("div");
             overlay.style.position = "fixed";
             overlay.style.top = "0";
@@ -252,7 +253,12 @@
         	iframe.style.position = "absolute";
         	iframe.style.left = "-9999px"; 
         	iframe.onload = () => {
-            	    instructions.innerHTML = "Lightspeed has been killed! You can close this tab now.";
+        	    if (Date.now() - timeOfPopupCreation < 1500) {
+            		instructions.innerHTML = "Lightspeed failed to be hanged...";
+        	    } else {
+            		instructions.innerHTML = "Lightspeed has been killed! You can close this tab now.";
+        	    }
+		    clearInterval(checkKilledInterval);
         	};
         	document.body.appendChild(iframe);
 
@@ -260,7 +266,7 @@
             	    document.body.removeChild(iframe);
         	}, 1000);
    	    }
-	    setInterval(checkKilled, 1000);
+	    let checkKilledInterval = setInterval(checkKilled, 1000);
         }
     </script>
 </head>
