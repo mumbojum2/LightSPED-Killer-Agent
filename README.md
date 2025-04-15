@@ -1,4 +1,4 @@
-# CURRENTLY PATCHED IN LIGHTSPEED VERSIONS ABOVE 3.9.6
+# CURRENTLY PATCHED IN LIGHTSPEED VERSIONS ABOVE 3.9.6 USE EXTPRINT3R INSTEAD FOR NOW
 ## LightSPED Killer Agent
 LightSPED is a tool made by [Blobby-Boi](https://github.com/Blobby-Boi) that allows ChromeOS users to easily disable the "Lightspeed Filter Agent" extension. This will persist until you restart your computer or flip the switch again.
 
